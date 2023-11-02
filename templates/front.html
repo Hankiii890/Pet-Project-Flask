@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Аптека</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
+
+    .header {
+        background-color: #4CAF50;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header h1 {
+        color: #ffffff;
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .btn-cart {
+        background-color: #ffffff;
+        color: #4CAF50;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-right: 20px;
+    }
+
+    .product-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .product {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .product-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .product-image {
+        max-width: 200px;
+        max-height: 200px;
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .product-description {
+        margin-bottom: 10px;
+    }
+
+    .product-button {
+        background-color: #4CAF50;
+        color: #ffffff;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .product-button:hover {
+        background-color: #45a049;
+    }
+
+    .empty-products {
+        text-align: center;
+        margin-top: 50px;
+        font-weight: bold;
+    }
+    </style>
+
+</head>
+<body>
+<div class="header">
+    <h1>Аптека</h1>
+    <a class="btn-cart" href="/cart">Перейти в корзину</a>
+</div>
+
+<div class="product-container">
+    {% if products %}
+        {% for product in products %}
+            <div class="product">
+                <h3 class="product-title">{{ product.title }}</h3>
+                <img src="{{ url_for('static', filename=product.item_image_path) }}" alt="{{ product.title }}" class="product-image">
+                <p class="product-price">Цена: {{ product.price }}</p>
+                <p class="product-description">{{ product.text }}</p>
+                <form action="/cart/{{ product.id }}" method="POST">
+                    <input type="hidden" name="item_image_path" value="{{ product.item_image_path }}">
+                    <button class="product-button" type="submit">Добавить в корзину</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-products">Товары отсутствуют.</p>
+    {% endif %}
+</div>
+</body>
+</html>

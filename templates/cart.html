@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Корзина</title>
+<style>
+.cart-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.header {
+  background-color: #f2f2f2;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-shop {
+  background-color: #4CAF50;
+  color: #ffffff;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.cart-title {
+  font-size: 20px;
+}
+
+.cart-description {
+  margin-bottom: 5px;
+}
+
+.cart-button {
+  background-color: #4CAF50;
+  color: #ffffff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cart-button:hover {
+  background-color: #45a049;
+}
+
+.total-cost {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.payment-button {
+  background-color: #4CAF50;
+  color: #ffffff;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.payment-button:hover {
+  background-color: #45a049;
+}
+
+.cart-item img {
+  max-width: 100px;
+  max-height: 100px;
+  margin-right: 10px;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Корзина</h1>
+  <a class="btn-shop" href="/">Продолжить покупки</a>
+</div>
+
+{% if products %}
+  {% for product in products %}
+    <div id="cart-item-list">
+      <div class="cart-item">
+        <h3>{{ product.title }}</h3>
+        <img src="{{ url_for('static', filename=product.item_image_path) }}" alt="{{ product.title }}">
+        <p>Цена: {{ product.price }}</p>
+        <p>Количество: {{ session['cart'].count(product.id) }} </p>
+        <p>Описание: {{ product.text }}</p>
+        <form action="/cart/delete/{{ product.id }}" method="post">
+          <input type="hidden" name="item_image_path" value="{{ product.item_image_path }}">
+          <button class="cart-button" type="submit">Удалить из корзины</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="total-cost">
+    <p>Общая стоимость: {{ total_cost }}</p>
+    <a class="payment-button" href="/payment">Перейти к оплате</a>
+  </div>
+
+{% else %}
+  <p>Корзина пуста.</p>
+{% endif %}
+</body>
+</html>
