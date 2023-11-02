@@ -60,18 +60,19 @@ def cart():
 
 
 @app.route('/cart/<int:product_id>', methods=['POST'])
-def cart_add(product_id):
+def cart_add(product_id):    # 1
     if 'cart' not in session:
-        session['cart'] = []
-    session['cart'].append(product_id)
+        session['cart'] = {}    # {1: 1}
+    if product_id in session['cart']:
+        session['cart'][product_id] += 1    # {1: 2}
+    else:
+        session['cart'][product_id] = 1
     return redirect('/')
 
 
 @app.route('/cart/delete/<int:product_id>', methods=['POST'])
 def cart_delete(product_id):
-    if 'cart' not in session:
-        session['cart'] = []
-    session['cart'].remove(product_id)
+    session['cart'].pop(product_id)
     return redirect('/cart')
     #redirect('/cart')
 

@@ -3,103 +3,132 @@
 <head>
 <title>Корзина</title>
 <style>
-.cart-item {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-}
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
 
-.header {
-  background-color: #f2f2f2;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    .header {
+        background-color: #4CAF50;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.btn-shop {
-  background-color: #4CAF50;
-  color: #ffffff;
-  padding: 10px;
-  text-decoration: none;
-  border-radius: 5px;
-}
+    .header h1 {
+        color: #ffffff;
+        margin: 0;
+        padding-left: 20px;
+    }
 
-.cart-title {
-  font-size: 20px;
-}
+    .btn-shop {
+        background-color: #4CAF50;
+        color: #ffffff;
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 5px;
+    }
 
-.cart-description {
-  margin-bottom: 5px;
-}
+    .cart-container {
+        padding: 20px;
+    }
 
-.cart-button {
-  background-color: #4CAF50;
-  color: #ffffff;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+    .cart-item {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
 
-.cart-button:hover {
-  background-color: #45a049;
-}
+    .cart-title {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
 
-.total-cost {
-  text-align: right;
-  margin-top: 10px;
-}
+    .cart-description {
+        margin-bottom: 5px;
+    }
 
-.payment-button {
-  background-color: #4CAF50;
-  color: #ffffff;
-  padding: 10px;
-  text-decoration: none;
-  border-radius: 5px;
-}
+    .cart-item img {
+        max-width: 100px;
+        max-height: 100px;
+        margin-right: 10px;
+    }
 
-.payment-button:hover {
-  background-color: #45a049;
-}
+    .cart-button {
+        background-color: #4CAF50;
+        color: #ffffff;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-.cart-item img {
-  max-width: 100px;
-  max-height: 100px;
-  margin-right: 10px;
-}
+    .cart-button:hover {
+        background-color: #45a049;
+    }
+
+    .total-cost {
+        text-align: right;
+        margin-top: 10px;
+    }
+
+    .payment-button {
+        background-color: #4CAF50;
+        color: #ffffff;
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .payment-button:hover {
+        background-color: #45a049;
+    }
+
+    .empty-cart {
+        text-align: center;
+        margin-top: 50px;
+        font-weight: bold;
+    }
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>Корзина</h1>
-  <a class="btn-shop" href="/">Продолжить покупки</a>
+    <h1>Корзина</h1>
+    <a class="btn-shop" href="/">Продолжить покупки</a>
 </div>
 
-{% if products %}
-  {% for product in products %}
-    <div id="cart-item-list">
-      <div class="cart-item">
-        <h3>{{ product.title }}</h3>
-        <img src="{{ url_for('static', filename=product.item_image_path) }}" alt="{{ product.title }}">
-        <p>Цена: {{ product.price }}</p>
-        <p>Количество: {{ session['cart'].count(product.id) }} </p>
-        <p>Описание: {{ product.text }}</p>
-        <form action="/cart/delete/{{ product.id }}" method="post">
-          <input type="hidden" name="item_image_path" value="{{ product.item_image_path }}">
-          <button class="cart-button" type="submit">Удалить из корзины</button>
-        </form>
-      </div>
-    </div>
-  {% endfor %}
+<div class="cart-container">
+    {% if products %}
+        {% for product in products %}
+            <div id="cart-item-list">
+                <div class="cart-item">
+                    <div>
+                        <h3 class="cart-title">{{ product.title }}</h3>
+                        <p class="cart-description">Цена: {{ product.price }}</p>
+                        <p class="cart-description">Количество: {{ session['cart'].get(product.id) }}</p>
+                        <p class="cart-description">Описание: {{ product.text }}</p>
+                    </div>
+                    <img src="{{ url_for('static', filename=product.item_image_path) }}" alt="{{ product.title }}">
+                    <form action="/cart/delete/{{ product.id }}" method="post">
+                        <input type="hidden" name="item_image_path" value="{{ product.item_image_path }}">
+                        <button class="cart-button" type="submit">Удалить из корзины</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
 
-  <div class="total-cost">
-    <p>Общая стоимость: {{ total_cost }}</p>
-    <a class="payment-button" href="/payment">Перейти к оплате</a>
-  </div>
+        <div class="total-cost">
+            <p>Общая стоимость: {{ total_cost }}</p>
+            <a class="payment-button" href="/payment">Перейти к оплате</a>
+        </div>
 
-{% else %}
-  <p>Корзина пуста.</p>
-{% endif %}
+    {% else %}
+        <p class="empty-cart">Корзина пуста.</p>
+    {% endif %}
+</div>
 </body>
 </html>
