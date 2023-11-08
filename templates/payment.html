@@ -67,27 +67,22 @@
         Номер карты:
         <input type="text" name="card_number">
     </label>
-
-
     <label>
         Имя владельца карты:
         <input type="text" name="cardholder_name">
     </label>
-
-
     <label>
         Срок действия:
         <input type="text" name="expiration_date">
     </label>
-
-
     <label>
-        CVV код:
-        <input type="text" name="cvv">
+        CVS код:
+        <input type="text" name="cvs">
     </label>
-
-
     <input type="submit" value="Оплатить">
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
 </form>
 </body>
 </html>

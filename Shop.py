@@ -41,18 +41,31 @@ def index():
 @app.route('/payment', methods=['GET', 'POST'])
 def payment():
     if request.method == 'POST':
-        return render_template('itog.html')
-    return render_template('payment.html')
+        cart_number = request.form.get('card_number')
+        cardholder_name = request.form.get('cardholder_name')
+        expiration_date = request.form.get('expiration_date')
+        cvs = request.form.get('cvs')
 
+        session.pop('cart', None)
+
+        error_message = None
+
+        if not(cart_number and cardholder_name and expiration_date and cvs):
+            error_message = 'Пожалуйста, заполните поля правильно!'
+
+            return render_template('payment.html', error_message=error_message)
+        return render_template('itog.html', success_message=f'Оплата прошла успешно!')
+    else:
+        return render_template('payment.html')
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
-    if session['cart']:
+    if 'cart' in session and session['cart']:
         products = []
         total_cost = 0
         for product_id in session['cart']:
             product = Medecine.query.get(product_id)
-            print(url_for('cart'))
+            # print(url_for('cart'))
             products.append(product)
             total_cost += product.price
         return render_template('cart.html', products=products, total_cost=total_cost)
