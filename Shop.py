@@ -4,15 +4,15 @@ from flask_migrate import Migrate
 from flask_session import Session
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pcharmacy.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = "My Secret key"
-app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pcharmacy.db'    # Установка URL адреса для БД
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False    # Отключение отслеживания изменений в БД
+app.secret_key = "My Secret key"    # Задаём секретный ключ для подписей session
+app.config['SESSION_TYPE'] = 'filesystem'   # Установка типа хранения сессий(файловая система)
 Session(app)
-db = SQLAlchemy(app)
+db = SQLAlchemy(app)    # Создание экземпляра для работы с БД
 app.app_context().push()
-migrate = Migrate(app, db, command='migrate')
-sess = Session()
+migrate = Migrate(app, db, command='migrate')   # Создаём экземпляр для обработки миграций БД
+sess = Session()    # Создание экземпляр Session для работы с сессиями
 
 
 class Medecine(db.Model):
@@ -54,9 +54,12 @@ def payment():
             error_message = 'Пожалуйста, заполните поля правильно!'
 
             return render_template('payment.html', error_message=error_message)
+        session['cart_count'] = 0
         return render_template('itog.html', success_message=f'Оплата прошла успешно!')
+
     else:
         return render_template('payment.html')
+
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
@@ -65,9 +68,8 @@ def cart():
         total_cost = 0
         for product_id in session['cart']:
             product = Medecine.query.get(product_id)
-            # print(url_for('cart'))
             products.append(product)
-            total_cost += product.price
+            total_cost += product.price * session['cart'][product_id]
         return render_template('cart.html', products=products, total_cost=total_cost)
     return render_template('cart.html', products=None, total_cost=0)
 
@@ -76,29 +78,41 @@ def cart():
 def cart_add(product_id):    # 1
     if 'cart' not in session:
         session['cart'] = {}    # {1: 1}
+
     if product_id in session['cart']:
         session['cart'][product_id] += 1    # {1: 2}
     else:
         session['cart'][product_id] = 1
+
+    session['cart_count'] = sum(session['cart'].values())    # Обновление сессии кол-ва товаров в корзине
     return redirect('/')
 
 
 @app.route('/cart/delete/<int:product_id>', methods=['POST'])
 def cart_delete(product_id):
-    session['cart'].pop(product_id)
+    if product_id in session['cart'] and session['cart'][product_id] > 1:
+        session['cart'][product_id] -= 1
+    else:
+        del session['cart'][product_id]
+    session['cart_count'] = sum(session['cart'].values())
     return redirect('/cart')
-    #redirect('/cart')
 
 
-if __name__ == "__main__":
+@app.route('/cart/count')
+def cart_count():
+    cart_count = session.get('cart_count', 0)
+    return jsonify(cart_count=cart_count)
+
+
+if __name__ == "__main__":  # Проверка: является ли этот file.py - главным(если да, то код выполняется)
      with app.app_context():
-          db.create_all()
-          sess.init_app(app)
-          if not Medecine.query.first():
+          db.create_all()   # Создание всех таблиц в БД
+          sess.init_app(app)    # Инициализируем сессию
+          if not Medecine.query.first():    # Проверка на заполненность товаров БД
               db.session.add(product1)
               db.session.add(product2)
               db.session.add(product3)
               db.session.add(product4)
               db.session.add(product5)
               db.session.commit()
-     app.run(debug=True)
+     app.run(debug=True)    # Запуск сервера с выключенным режимом отладки

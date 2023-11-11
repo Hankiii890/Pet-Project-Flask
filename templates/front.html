@@ -4,92 +4,103 @@
 <title>Аптека</title>
 <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
-    }
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+}
 
-    .header {
-        background-color: #4CAF50;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+.header {
+    background-color: #4CAF50;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    .header h1 {
-        color: #ffffff;
-        margin: 0;
-        padding-left: 20px;
-    }
+.header h1 {
+    color: #ffffff;
+    margin: 0;
+    padding-left: 20px;
+}
 
-    .btn-cart {
-        background-color: #ffffff;
-        color: #4CAF50;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-        margin-right: 20px;
-    }
+.btn-cart {
+    background-color: #ffffff;
+    color: #4CAF50;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-right: 30px;
+}
 
-    .product-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        padding: 20px;
-    }
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
 
-    .product {
-        background-color: #ffffff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.product {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
-    .product-title {
-        font-size: 20px;
-        margin-bottom: 10px;
-        color: #333333;
-    }
+.product-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333333;
+}
 
-    .product-image {
-        max-width: 200px;
-        max-height: 200px;
-        margin-bottom: 10px;
-    }
+.product-image {
+    max-width: 200px;
+    max-height: 200px;
+    margin-bottom: 10px;
+}
 
-    .product-price {
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #4CAF50;
-    }
+.product-price {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #4CAF50;
+}
 
-    .product-description {
-        margin-bottom: 10px;
-        color: #555555;
-    }
+.product-description {
+    margin-bottom: 10px;
+    color: #555555;
+}
 
-    .product-button {
-        background-color: #4CAF50;
-        color: #ffffff;
-        padding: 5px 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+.product-button {
+    background-color: #4CAF50;
+    color: #ffffff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-    .product-button:hover {
-        background-color: #45a049;
-    }
+.product-button:hover {
+    background-color: #45a049;
+}
 
-    .empty-products {
-        text-align: center;
-        margin-top: 50px;
-        font-weight: bold;
-        color: #555555;
-    }
+.empty-products {
+    text-align: center;
+    margin-top: 50px;
+    font-weight: bold;
+    color: #555555;
+}
+
+.cart-count {
+    background-color: white;
+    color: green;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 14px;
+    position: absolute;
+    top: 23px;
+    right: 15px;
+}
 </style>
 
 </head>
@@ -97,6 +108,15 @@
 <div class="header">
     <h1>Аптека</h1>
     <a class="btn-cart" href="/cart">Перейти в корзину</a>
+    <span class="cart-count" id="cart-count">{{ session['cart_count'] }}</span>
+
+    <script>
+        // Получаем количество товаров в корзине из переменной cart_count
+        var cartCount = {{ cart_count }};
+
+        // Установка текста с количеством товаров в элементе с id "cart-count"
+        document.getElementById("cart-count").textContent = cartCount;
+    </script>
 </div>
 
 <div class="product-container">
