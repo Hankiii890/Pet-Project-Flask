@@ -2,14 +2,15 @@
 <html>
 <head>
 <title>Аптека</title>
+    <link rel="icon" href="static/images/icon.png" type="image/x-icon">
 <style>
     body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #DEF2F1 ;
 }
 
 .header {
-    background-color: #4CAF50;
+    background-color: #3AAFA9;
     padding: 10px;
     display: flex;
     justify-content: space-between;
@@ -24,10 +25,10 @@
 
 .btn-cart {
     background-color: #ffffff;
-    color: #4CAF50;
+    color: #659DBD;
     padding: 10px 20px;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 7px;
     font-weight: bold;
     margin-right: 30px;
 }
@@ -51,7 +52,7 @@
 .product-title {
     font-size: 20px;
     margin-bottom: 10px;
-    color: #333333;
+    color: #659DBD;
 }
 
 .product-image {
@@ -63,7 +64,7 @@
 .product-price {
     margin-bottom: 5px;
     font-weight: bold;
-    color: #4CAF50;
+    color: #659DBD;
 }
 
 .product-description {
@@ -93,22 +94,25 @@
 
 .cart-count {
     background-color: white;
-    color: green;
+    color: #659DBD;
     padding: 5px 10px;
-    border-radius: 50%;
-    font-size: 14px;
+    font-size: 23px;
     position: absolute;
-    top: 23px;
+    top: 19px;
     right: 15px;
+    border-radius: 7px;
 }
-</style>
 
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="header">
     <h1>Аптека</h1>
     <a class="btn-cart" href="/cart">Перейти в корзину</a>
-    <span class="cart-count" id="cart-count">{{ session['cart_count'] }}</span>
+    <span class="cart-count">{{ session['cart_count'] }}</span>
 
     <script>
         // Получаем количество товаров в корзине из переменной cart_count
