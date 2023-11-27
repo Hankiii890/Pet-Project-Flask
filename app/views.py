@@ -1,5 +1,4 @@
 from flask import render_template, url_for, request, redirect, session, jsonify
-
 from main import app
 from models import Medecine
 
@@ -76,6 +75,7 @@ def cart_delete(product_id):
 def cart_count():
     cart_count = session.get('cart_count', 0)
     return jsonify(cart_count=cart_count)
+
 
 if __name__ == '__main__':
     app.run()
