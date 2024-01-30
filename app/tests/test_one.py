@@ -1,6 +1,5 @@
 import pytest
 from app.views import *
-from main import db
 
 
 @pytest.fixture()
